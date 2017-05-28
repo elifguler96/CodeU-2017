@@ -107,7 +107,7 @@ public class Assignment2Q2 {
 	}
 
 	/**
-	 * Checks is node is present in the tree whose root is root
+	 * Checks if node is present in the tree whose root is root
 	 * 
 	 * @param node
 	 *            node to be checked
