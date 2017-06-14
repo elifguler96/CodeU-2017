@@ -25,10 +25,7 @@ public class Assignment3 {
             }
         }
 
-        List<String> words = new ArrayList<>();
-        words.addAll(setOfWords);
-
-        return words;
+        return new ArrayList<String>(setOfWords);
     }
 
     /**
