@@ -1,8 +1,9 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Assignment3 {
-    private Set<String> setOfWords = new HashSet<>();
-
     /**
     * Finds all the words in a grid of characters
     *
@@ -12,7 +13,8 @@ public class Assignment3 {
     * @param  dictionary   dictionary containing the words
     * @return              the list of words found in the grid, null if no words found
     */
-    public List<String> findAllWords(int rowNumber, int columnNumber, char[][] grid, MyDictionary dictionary) {
+    public static List<String> findAllWords(int rowNumber, int columnNumber, char[][] grid, MyDictionary dictionary) {
+        Set<String> setOfWords = new HashSet<>();
         boolean[][] visited = new boolean[rowNumber][columnNumber];
         String s = "";
 
@@ -20,7 +22,7 @@ public class Assignment3 {
         // and resets the visited array afterwards
         for (int i = 0; i < rowNumber; i++) {
             for (int j = 0; j < columnNumber; j++) {
-                formWords(grid, i, j, visited, s, dictionary);
+                formWords(grid, i, j, visited, s, dictionary, setOfWords);
                 visited = new boolean[rowNumber][columnNumber];
             }
         }
@@ -41,8 +43,8 @@ public class Assignment3 {
     * @param  s          forms the word
     * @param  dictionary dictionary containing the words
     */
-    private void formWords(char[][] grid, int row, int column, boolean[][] visited, String s,
-                                                   MyDictionary dictionary) {
+    private static void formWords(char[][] grid, int row, int column, boolean[][] visited, String s,
+                           MyDictionary dictionary, Set<String> setOfWords) {
         // If the new s is not a prefix, we don't have to keep looking
         if (!dictionary.isPrefix(s + grid[row][column])) {
             return;
@@ -59,7 +61,7 @@ public class Assignment3 {
         for (int i = row - 1; i <= row + 1 && i < grid.length; i++) {
             for (int j = column - 1; j <= column + 1 && j < grid[0].length; j++) {
                 if (i >= 0 && j >= 0 && !visited[i][j]) {
-                    formWords(grid, i, j, visited, s, dictionary);
+                    formWords(grid, i, j, visited, s, dictionary, setOfWords);
                     visited[i][j] = false;
                 }
             }
