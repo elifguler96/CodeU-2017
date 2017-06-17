@@ -3,7 +3,7 @@ This repository is for the assignments given in Google's CodeU Program.
 
 # About Me
 
-<img alt="insert me in brussels enjoying kriek here" src="https://scontent-fra3-1.cdninstagram.com/t51.2885-15/e35/16229017_1874047329548920_2143794425711558656_n.jpg" width="600" height="auto">
+<img alt="insert me in brussels enjoying kriek here" src="https://scontent-vie1-1.cdninstagram.com/t51.2885-15/e35/16229017_1874047329548920_2143794425711558656_n.jpg" width="600" height="auto">
 
 * I'm a sophomore in Computer Engineering at Boğaziçi.
 * I graduated from Robert College.
