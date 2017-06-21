@@ -3,7 +3,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,50 +23,68 @@ class BinaryTreeNodeTest {
     }
 
     @Test
-    void findAncestorsTest() {
-        // Normal case
-        assertEquals(n8.findAncestors(18), Collections.singletonList(16));
+    void findAncestorsTestNormal() {
+        assertEquals(n8.findAncestors(18), Arrays.asList(16));
+    }
 
-        // Leaf case
+    @Test
+    void findAncestorsTestLeaf() {
         assertEquals(n8.findAncestors(5), Arrays.asList(3, 9, 16));
+    }
 
-        // Root case
+    @Test
+    void findAncestorsTestRoot() {
         assertEquals(n8.findAncestors(16), Collections.emptyList());
+    }
 
-        // Not in tree case
+    @Test
+    void findAncestorsTestNotInTree() {
         assertEquals(n8.findAncestors(2555), null);
+    }
 
-        // Null case
+    @Test
+    void findAncestorsTestNull() {
         assertEquals(n8.findAncestors(null), null);
     }
 
     @Test
-    void findCommonAncestorTest() {
-        // One on left one on right case
+    void findCommonAncestorTestOneOnLeftOneOnRight() {
         assertEquals(n8.findCommonAncestor(n1, n2), n3);
+    }
 
-        //One parent one left child case
+    @Test
+    void findCommonAncestorTestOneParentOneLeftChild() {
         assertEquals(n8.findCommonAncestor(n5, n2), n5);
+    }
 
-        //One parent one right child case
+    @Test
+    void findCommonAncestorTestOneParentOneRightChild() {
         assertEquals(n8.findCommonAncestor(n7, n6), n7);
+    }
 
-        // Node1 is not in tree case
+    @Test
+    void findCommonAncestorTestNode1NotInTree() {
         assertThrows(IllegalArgumentException.class, () -> {
             n8.findCommonAncestor(new BinaryTreeNode<Integer>(6), n2);
         });
+    }
 
-        // Node2 is not in tree case
+    @Test
+    void findCommonAncestorTestNode2NotInTree() {
         assertThrows(IllegalArgumentException.class, () -> {
             n8.findCommonAncestor(n5, new BinaryTreeNode<Integer>(7));
         });
+    }
 
-        // Both nodes are not in tree case
+    @Test
+    void findCommonAncestorTestBothNodesNotInTree() {
         assertThrows(IllegalArgumentException.class, () -> {
             n8.findCommonAncestor(new BinaryTreeNode<Integer>(2), new BinaryTreeNode<Integer>(7));
         });
+    }
 
-        //Null node case
+    @Test
+    void findCommonAncestorTestNullNode() {
         assertThrows(IllegalArgumentException.class, () -> {
             n8.findCommonAncestor(null, null);
         });
