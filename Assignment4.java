@@ -1,13 +1,13 @@
 public class Assignment4 {
     /**
-     * Finds the number of islands in the map.
+     * Finds the number of islands in the map using recursion.
      *
      * @param rowNumber    number of rows
      * @param columnNumber number of columns
      * @param map          map of the area
      * @return number of islands, 0 if map is null
      */
-    public static int findNumberOfIslands(int rowNumber, int columnNumber, boolean[][] map) {
+    public static int findNumberOfIslandsRecursive(int rowNumber, int columnNumber, boolean[][] map) {
         if (map == null) {
             return 0;
         }
@@ -60,5 +60,58 @@ public class Assignment4 {
         if (column < map[0].length - 1 && map[row][column + 1] && !visited[row][column + 1]) {
             discoverIsland(row, column + 1, map, visited);
         }
+    }
+
+    /**
+     * Finds the number of islands in the map using disjoint set.
+     *
+     * @param rowNumber    number of rows
+     * @param columnNumber number of columns
+     * @param map          map of the area
+     * @return number of islands, 0 if map is null
+     */
+    public static int findNumberOfIslandsDisjointSet(int rowNumber, int columnNumber, boolean[][] map) {
+        if (map == null) {
+            return 0;
+        }
+
+        DisjointSet disjointSet = new DisjointSet(rowNumber * columnNumber);
+        boolean isLand;
+
+        for (int i = 0; i < rowNumber; i++) {
+            for (int j = 0; j < columnNumber; j++) {
+                isLand = map[i][j];
+
+                if (isLand) {
+                    disjointSet.makeSet(findId(i, j, columnNumber));
+
+                    // union with land above tile
+                    if (i > 0 && map[i - 1][j]) {
+                        disjointSet.union(findId(i, j, columnNumber), findId(i - 1, j, columnNumber));
+                    }
+
+                    // union with land to the left of tile
+                    if (j > 0 && map[i][j - 1]) {
+                        disjointSet.union(findId(i, j, columnNumber), findId(i, j - 1, columnNumber));
+                    }
+                }
+            }
+        }
+
+        return disjointSet.getCount();
+
+    }
+
+    /**
+     * Calculates the id of a tile in the map.
+     * Ids of tiles start from 1 and go up by 1 accordingly.
+     *
+     * @param rowNumber       row number of the tile
+     * @param columnNumber    column number of the tile
+     * @param mapColumnNumber column number of the map
+     * @return id of tile
+     */
+    private static int findId(int rowNumber, int columnNumber, int mapColumnNumber) {
+        return rowNumber * mapColumnNumber + columnNumber + 1;
     }
 }
