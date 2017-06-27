@@ -2,23 +2,22 @@ public class Assignment4 {
     /**
      * Finds the number of islands in the map using recursion.
      *
-     * @param rowNumber    number of rows
-     * @param columnNumber number of columns
-     * @param map          map of the area
+     * @param row    number of rows
+     * @param column number of columns
+     * @param map    map of the area
      * @return number of islands, 0 if map is null
      */
-    public static int findNumberOfIslandsRecursive(int rowNumber, int columnNumber, boolean[][] map) {
+    public static int findNumberOfIslandsRecursive(int row, int column, boolean[][] map) {
         if (map == null) {
             return 0;
         }
 
         int numberOfIslands = 0;
-        boolean[][] visited = new boolean[rowNumber][columnNumber];
-        boolean isLand;
+        boolean[][] visited = new boolean[row][column];
 
-        for (int i = 0; i < rowNumber; i++) {
-            for (int j = 0; j < columnNumber; j++) {
-                isLand = map[i][j];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                boolean isLand = map[i][j];
 
                 if (isLand && !visited[i][j]) {
                     discoverIsland(i, j, map, visited);
@@ -65,34 +64,33 @@ public class Assignment4 {
     /**
      * Finds the number of islands in the map using disjoint set.
      *
-     * @param rowNumber    number of rows
-     * @param columnNumber number of columns
-     * @param map          map of the area
+     * @param row    number of rows
+     * @param column number of columns
+     * @param map    map of the area
      * @return number of islands, 0 if map is null
      */
-    public static int findNumberOfIslandsDisjointSet(int rowNumber, int columnNumber, boolean[][] map) {
+    public static int findNumberOfIslandsDisjointSet(int row, int column, boolean[][] map) {
         if (map == null) {
             return 0;
         }
 
-        DisjointSet disjointSet = new DisjointSet(rowNumber * columnNumber);
-        boolean isLand;
+        DisjointSet disjointSet = new DisjointSet(row * column);
 
-        for (int i = 0; i < rowNumber; i++) {
-            for (int j = 0; j < columnNumber; j++) {
-                isLand = map[i][j];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                boolean isLand = map[i][j];
 
                 if (isLand) {
-                    disjointSet.makeSet(findId(i, j, columnNumber));
+                    disjointSet.makeSet(findId(i, j, column));
 
                     // union with land above tile
                     if (i > 0 && map[i - 1][j]) {
-                        disjointSet.union(findId(i, j, columnNumber), findId(i - 1, j, columnNumber));
+                        disjointSet.union(findId(i, j, column), findId(i - 1, j, column));
                     }
 
                     // union with land to the left of tile
                     if (j > 0 && map[i][j - 1]) {
-                        disjointSet.union(findId(i, j, columnNumber), findId(i, j - 1, columnNumber));
+                        disjointSet.union(findId(i, j, column), findId(i, j - 1, column));
                     }
                 }
             }
@@ -106,12 +104,12 @@ public class Assignment4 {
      * Calculates the id of a tile in the map.
      * Ids of tiles start from 1 and go up by 1 accordingly.
      *
-     * @param rowNumber       row number of the tile
-     * @param columnNumber    column number of the tile
-     * @param mapColumnNumber column number of the map
+     * @param row       row number of the tile
+     * @param column    column number of the tile
+     * @param mapColumn column number of the map
      * @return id of tile
      */
-    private static int findId(int rowNumber, int columnNumber, int mapColumnNumber) {
-        return rowNumber * mapColumnNumber + columnNumber + 1;
+    private static int findId(int row, int column, int mapColumn) {
+        return row * mapColumn + column + 1;
     }
 }

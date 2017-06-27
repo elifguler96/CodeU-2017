@@ -5,191 +5,132 @@ import static com.elifguler.Assignment4.findNumberOfIslandsRecursive;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Assignment4Test {
-    @Test
-    void findNumberOfIslandsRecursiveTestNormal() {
-        boolean[][] map = {
+    boolean[][] MAP_NORMAL = {
             {false, true, false, true},
             {true, true, false, false},
             {false, false, true, false},
             {false, false, true, false}
-        };
+    };
 
-        assertEquals(3, findNumberOfIslandsRecursive(4, 4, map));
+    boolean[][] MAP_ALL_TRUE = {
+            {true, true, true, true},
+            {true, true, true, true},
+            {true, true, true, true},
+            {true, true, true, true}
+    };
+
+    boolean[][] MAP_ALL_FALSE = {
+            {false, false, false, false},
+            {false, false, false, false},
+            {false, false, false, false},
+            {false, false, false, false}
+    };
+
+    boolean[][] MAP_1x1_FALSE = {
+            {false}
+    };
+
+    boolean[][] MAP_1x1_TRUE = {
+            {true}
+    };
+
+    boolean[][] MAP_NON_SQUARE = {
+            {false, true, false, true},
+            {true, true, true, false},
+            {false, false, true, false}
+    };
+
+    boolean[][] MAP_BIG = {
+            {false, true,   false,  true,   false,  false,  true,   true,   true},
+            {true,  true,   true,   false,  true,   false,  false,  false,  true},
+            {false, false,  true,   false,  false,  true,   true,   true,   false},
+            {false, true,   false,  true,   false,  false,  true,   true,   true},
+            {true,  true,   true,   false,  true,   false,  false,  false,  true},
+            {false, false,  true,   false,  false,  true,   true,   true,   false},
+            {false, true,   false,  true,   false,  false,  true,   true,   true},
+            {true,  true,   true,   false,  true,   false,  false,  false,  true},
+            {false, false,  true,   false,  false,  true,   true,   true,   false},
+            {false, true,   false,  true,   false,  false,  true,   true,   true},
+            {true,  true,   true,   false,  true,   false,  false,  false,  true},
+            {false, false,  true,   true,   false,  true,   true,   true,   false},
+            {false, true,   false,  true,   false,  false,  true,   true,   false},
+            {true,  true,   true,   false,  true,   false,  false,  false,  true},
+            {false, false,  true,   false,  false,  true,   true,   true,   false},
+            {true,  true,   false,  true,   false,  false,  true,   true,   true},
+            {true,  true,   true,   false,  true,   false,  false,  false,  true},
+            {false, false,  true,   false,  false,  true,   true,   true,   false},
+            {false, true,   false,  true,   false,  false,  true,   true,   true},
+            {true,  true,   true,   true,   true,   true,   true,   true,   true},
+            {false, false,  false,  false,  false,  false,  false,  false,  false},
+    };
+
+    @Test
+    void findNumberOfIslandsRecursiveTestNormal() {
+        assertEquals(3, findNumberOfIslandsRecursive(4, 4, MAP_NORMAL));
     }
 
     @Test
     void findNumberOfIslandsDisjointSetTestNormal() {
-        boolean[][] map = {
-                {false, true, false, true},
-                {true, true, false, false},
-                {false, false, true, false},
-                {false, false, true, false}
-        };
-
-        assertEquals(3, findNumberOfIslandsDisjointSet(4, 4, map));
+        assertEquals(3, findNumberOfIslandsDisjointSet(4, 4, MAP_NORMAL));
     }
 
     @Test
     void findNumberOfIslandsRecursiveTestAllTrue() {
-        boolean[][] map = {
-                {true, true, true, true},
-                {true, true, true, true},
-                {true, true, true, true},
-                {true, true, true, true}
-        };
-
-        assertEquals(1, findNumberOfIslandsRecursive(4, 4, map));
+        assertEquals(1, findNumberOfIslandsRecursive(4, 4, MAP_ALL_TRUE));
     }
 
     @Test
     void findNumberOfIslandsDisjointSetTestAllTrue() {
-        boolean[][] map = {
-                {true, true, true, true},
-                {true, true, true, true},
-                {true, true, true, true},
-                {true, true, true, true}
-        };
-
-        assertEquals(1, findNumberOfIslandsDisjointSet(4, 4, map));
+        assertEquals(1, findNumberOfIslandsDisjointSet(4, 4, MAP_ALL_TRUE));
     }
 
     @Test
     void findNumberOfIslandsRecursiveTestAllFalse() {
-        boolean[][] map = {
-                {false, false, false, false},
-                {false, false, false, false},
-                {false, false, false, false},
-                {false, false, false, false}
-        };
-
-        assertEquals(0, findNumberOfIslandsRecursive(4, 4, map));
+        assertEquals(0, findNumberOfIslandsRecursive(4, 4, MAP_ALL_FALSE));
     }
 
     @Test
     void findNumberOfIslandsDisjointSetTestAllFalse() {
-        boolean[][] map = {
-                {false, false, false, false},
-                {false, false, false, false},
-                {false, false, false, false},
-                {false, false, false, false}
-        };
-
-        assertEquals(0, findNumberOfIslandsDisjointSet(4, 4, map));
+        assertEquals(0, findNumberOfIslandsDisjointSet(4, 4, MAP_ALL_FALSE));
     }
 
     @Test
     void findNumberOfIslandsRecursiveTest1x1False() {
-        boolean[][] map = {
-                {false}
-        };
-
-        assertEquals(0, findNumberOfIslandsRecursive(1, 1, map));
+        assertEquals(0, findNumberOfIslandsRecursive(1, 1, MAP_1x1_FALSE));
     }
 
     @Test
     void findNumberOfIslandsDisjointSetTest1x1False() {
-        boolean[][] map = {
-                {false}
-        };
-
-        assertEquals(0, findNumberOfIslandsDisjointSet(1, 1, map));
+        assertEquals(0, findNumberOfIslandsDisjointSet(1, 1, MAP_1x1_FALSE));
     }
 
     @Test
     void findNumberOfIslandsRecursiveTest1x1True() {
-        boolean[][] map = {
-                {true}
-        };
-
-        assertEquals(1, findNumberOfIslandsRecursive(1, 1, map));
+        assertEquals(1, findNumberOfIslandsRecursive(1, 1, MAP_1x1_TRUE));
     }
 
     @Test
     void findNumberOfIslandsDisjointSetTest1x1True() {
-        boolean[][] map = {
-                {true}
-        };
-
-        assertEquals(1, findNumberOfIslandsDisjointSet(1, 1, map));
+        assertEquals(1, findNumberOfIslandsDisjointSet(1, 1, MAP_1x1_TRUE));
     }
 
     @Test
     void findNumberOfIslandsRecursiveTestNonSquare() {
-        boolean[][] map = {
-                {false, true, false, true},
-                {true, true, true, false},
-                {false, false, true, false}
-        };
-
-        assertEquals(2, findNumberOfIslandsRecursive(3, 4, map));
+        assertEquals(2, findNumberOfIslandsRecursive(3, 4, MAP_NON_SQUARE));
     }
 
     @Test
     void findNumberOfIslandsDisjointSetTestNonSquare() {
-        boolean[][] map = {
-                {false, true, false, true},
-                {true, true, true, false},
-                {false, false, true, false}
-        };
-
-        assertEquals(2, findNumberOfIslandsDisjointSet(3, 4, map));
+        assertEquals(2, findNumberOfIslandsDisjointSet(3, 4, MAP_NON_SQUARE));
     }
 
     @Test
     void findNumberOfIslandsRecursiveTestBigMap() {
-        boolean[][] map = {
-                {false, true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   false,  false,  true,   true,   true,   false},
-                {false, true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   false,  false,  true,   true,   true,   false},
-                {false, true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   false,  false,  true,   true,   true,   false},
-                {false, true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   true,   false,  true,   true,   true,   false},
-                {false, true,   false,  true,   false,  false,  true,   true,   false},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   false,  false,  true,   true,   true,   false},
-                {true,  true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   false,  false,  true,   true,   true,   false},
-                {false, true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   true,   true,   true,   true,   true,   true},
-                {false, false,  false,  false,  false,  false,  false,  false,  false},
-        };
-
-        assertEquals(25, findNumberOfIslandsRecursive(21, 9, map));
+        assertEquals(25, findNumberOfIslandsRecursive(21, 9, MAP_BIG));
     }
 
     @Test
     void findNumberOfIslandsDisjointSetTestBigMap() {
-        boolean[][] map = {
-                {false, true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   false,  false,  true,   true,   true,   false},
-                {false, true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   false,  false,  true,   true,   true,   false},
-                {false, true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   false,  false,  true,   true,   true,   false},
-                {false, true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   true,   false,  true,   true,   true,   false},
-                {false, true,   false,  true,   false,  false,  true,   true,   false},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   false,  false,  true,   true,   true,   false},
-                {true,  true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   false,  true,   false,  false,  false,  true},
-                {false, false,  true,   false,  false,  true,   true,   true,   false},
-                {false, true,   false,  true,   false,  false,  true,   true,   true},
-                {true,  true,   true,   true,   true,   true,   true,   true,   true},
-                {false, false,  false,  false,  false,  false,  false,  false,  false},
-        };
-
-        assertEquals(25, findNumberOfIslandsDisjointSet(21, 9, map));
+        assertEquals(25, findNumberOfIslandsDisjointSet(21, 9, MAP_BIG));
     }
 }
