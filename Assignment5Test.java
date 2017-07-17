@@ -2,7 +2,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.elifguler.Assignment5.inferAlphabet;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,15 +21,8 @@ class Assignment5Test {
     @Test
     void inferAlphabetTestOneWord() {
         List<String> words = Arrays.asList("ART");
-        List<Character> alphabet1 = Arrays.asList('A', 'T', 'R');
-        List<Character> alphabet2 = Arrays.asList('T', 'A', 'R');
-        List<Character> alphabet3 = Arrays.asList('A', 'R', 'T');
-        List<Character> alphabet4 = Arrays.asList('R', 'A', 'T');
-        List<Character> alphabet5 = Arrays.asList('R', 'T', 'A');
-        List<Character> alphabet6 = Arrays.asList('T', 'R', 'A');
-        assertTrue(inferAlphabet(words).equals(alphabet1) || inferAlphabet(words).equals(alphabet2) ||
-                inferAlphabet(words).equals(alphabet3) || inferAlphabet(words).equals(alphabet4) ||
-                inferAlphabet(words).equals(alphabet5) || inferAlphabet(words).equals(alphabet6));
+        Set<Character> alphabet = new HashSet<>(Arrays.asList('A', 'T', 'R'));
+        assertTrue(alphabet.containsAll(inferAlphabet(words)));
     }
 
     @Test

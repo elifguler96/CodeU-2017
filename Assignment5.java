@@ -1,9 +1,9 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.LinkedHashSet;
@@ -21,50 +21,44 @@ public class Assignment5 {
             return Collections.emptyList();
         }
 
-        Set<Character> set = new HashSet<>();
-
-        String s1 = words.get(0);
-        // Performed so that all characters will be in the returned list even if topologicalSort doesn't contain some.
-        addAllCharacters(s1, set);
-
         Map<Character, Vertex> graph = new HashMap<>();
 
-        for (int i = 0; i < words.size() - 1; i++) {
-            s1 = words.get(i);
-            String s2 = words.get(i + 1);
+        ListIterator<String> iterator = words.listIterator();
 
-            addAllCharacters(s2, set);
+        String s1 = iterator.next();
+        addAllCharacters(s1, graph);
 
-            try {
-                int index = findFirstDifferingIndex(s1, s2);
-                // s1.charAt(index) comes before s2.charAt(index).
-                createEdgeBetweenVertices(s1.charAt(index), s2.charAt(index), graph);
-            } catch (NoDifferenceException ignored) {
-                // Just continue if two strings are identical.
+        while (iterator.nextIndex() < words.size()) {
+            String s2 = s1;
+            s1 = iterator.next();
+
+            addAllCharacters(s1, graph);
+
+            int index = findFirstDifferingIndex(s1, s2);
+
+            if (index != -1) {
+                // s2.charAt(index) comes before s1.charAt(index).
+                createEdgeBetweenVertices(s2.charAt(index), s1.charAt(index), graph);
             }
         }
 
-        Set<Character> alphabet = topologicalSort(graph);
-
-        alphabet.addAll(set);
-
-        return new ArrayList<>(alphabet);
+        return new ArrayList<>(topologicalSort(graph));
     }
 
     /**
-     * Adds all characters of s to set
+     * Adds all characters of s to set.
      *
-     * @param s   word whose characters are going to be added to set
-     * @param set holds the characters of s
+     * @param s     word whose characters are going to be added to set.
+     * @param graph graph containing the vertices.
      */
-    private static void addAllCharacters(String s, Set<Character> set) {
+    private static void addAllCharacters(String s, Map<Character, Vertex> graph) {
         for (int i = 0; i < s.length(); i++) {
-            set.add(s.charAt(i));
+            char c = s.charAt(i);
+
+            if (!graph.containsKey(c)) {
+                graph.put(c, new Vertex(c));
+            }
         }
-    }
-
-    private static class NoDifferenceException extends Exception {
-
     }
 
     /**
@@ -72,10 +66,9 @@ public class Assignment5 {
      *
      * @param s1 string number one.
      * @param s2 string number two.
-     * @return index s1 and s2 start to differ.
-     * @throws NoDifferenceException if s1 and s2 are not different in an index of the shorter one.
+     * @return index s1 and s2 start to differ. -1 if no difference.
      */
-    private static int findFirstDifferingIndex(String s1, String s2) throws NoDifferenceException {
+    private static int findFirstDifferingIndex(String s1, String s2) {
         int bound = Math.min(s1.length(), s2.length());
         int index = 0;
 
@@ -84,30 +77,21 @@ public class Assignment5 {
         }
 
         if (index == bound) {
-            throw new NoDifferenceException();
+            return -1;
         }
 
         return index;
     }
 
     /**
-     * Creates vertices with values from and to, and an edge between those in graph.
+     * Creates an edge between vertices with values from and to in graph.
      *
      * @param from  value of the vertex the edge will be coming from.
      * @param to    value of the vertex the edge will be coming to.
      * @param graph graph containing the vertices.
      */
     private static void createEdgeBetweenVertices(char from, char to, Map<Character, Vertex> graph) {
-        if (!graph.containsKey(from)) {
-            graph.put(from, new Vertex(from));
-        }
-
-        if (!graph.containsKey(to)) {
-            graph.put(to, new Vertex(to));
-        }
-
         graph.get(from).addEdge(graph.get(to));
-
         graph.get(to).incrementindegree();
     }
 
@@ -124,19 +108,12 @@ public class Assignment5 {
             return set;
         }
 
-        Vertex[] vertices = new Vertex[graph.size()];
-
-        int index = 0;
-
-        for (Map.Entry<Character, Vertex> entry : graph.entrySet()) {
-            vertices[index] = entry.getValue();
-            index++;
-        }
-
         Queue<Vertex> queue = new LinkedList<>();
 
         while (true) {
-            for (Vertex v : vertices) {
+            for (Map.Entry<Character, Vertex> entry : graph.entrySet()) {
+                Vertex v = entry.getValue();
+
                 if (v.getindegree() == 0) {
                     queue.add(v);
                     v.decrementindegree();
@@ -159,40 +136,40 @@ public class Assignment5 {
 
         return set;
     }
-}
 
-class Vertex {
-    private final char value;
-    private List<Vertex> edges;
-    private int indegree;
+    static class Vertex {
+        private final char value;
+        private List<Vertex> edges;
+        private int indegree;
 
-    public Vertex(char value) {
-        this.value = value;
-        edges = new LinkedList<>();
-        indegree = 0;
-    }
+        public Vertex(char value) {
+            this.value = value;
+            edges = new LinkedList<>();
+            indegree = 0;
+        }
 
-    public char getValue() {
-        return value;
-    }
+        public char getValue() {
+            return value;
+        }
 
-    public List<Vertex> getEdges() {
-        return Collections.unmodifiableList(edges);
-    }
+        public List<Vertex> getEdges() {
+            return Collections.unmodifiableList(edges);
+        }
 
-    public int getindegree() {
-        return indegree;
-    }
+        public int getindegree() {
+            return indegree;
+        }
 
-    public void addEdge(Vertex v) {
-        edges.add(v);
-    }
+        public void addEdge(Vertex v) {
+            edges.add(v);
+        }
 
-    public void incrementindegree() {
-        indegree++;
-    }
+        public void incrementindegree() {
+            indegree++;
+        }
 
-    public void decrementindegree() {
-        indegree--;
+        public void decrementindegree() {
+            indegree--;
+        }
     }
 }
