@@ -22,7 +22,8 @@ class Assignment5Test {
     void inferAlphabetTestOneWord() {
         List<String> words = Arrays.asList("ART");
         Set<Character> alphabet = new HashSet<>(Arrays.asList('A', 'T', 'R'));
-        assertTrue(alphabet.containsAll(inferAlphabet(words)));
+        List<Character> list = inferAlphabet(words);
+        assertTrue(alphabet.containsAll(list) && list.size() == 3);
     }
 
     @Test
