@@ -1,12 +1,13 @@
-import org.junit.jupiter.api.Test;
+package assignment6;
 
+import static assignment6.Assignment6.printListOfMoves;
+import static assignment6.Assignment6.rearrange;
+import static assignment6.Assignment6.rearrangeGreedy;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static com.elifguler.Assignment6.rearrange;
-import static com.elifguler.Assignment6.Move;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class Assignment6Test {
     
@@ -26,7 +27,7 @@ public class Assignment6Test {
     }
 
     @Test
-    public void rearrangeTestMoveEMpty() {
+    public void rearrangeTestMoveEmpty() {
         int[] given = {1, 2, 0, 3};
         int[] desired = {0, 1, 3, 2};
         
@@ -63,6 +64,62 @@ public class Assignment6Test {
         int[] desired = {1, 2, 3, 0};
 
         List<Move> list = rearrange(given, desired);
+        assertEquals(list, Arrays.asList(
+                new Move(1, 1, 0),
+                new Move(2, 2, 1),
+                new Move(3, 3, 2)
+        ));
+    }
+    
+    @Test
+    public void rearrangeGreedyTestNormal() {
+        int[] given = {1, 2, 0, 3};
+        int[] desired = {3, 1, 2, 0};
+
+        List<Move> list = rearrangeGreedy(given, desired);
+        assertEquals(list, Arrays.asList(
+                new Move(2, 1, 2),
+                new Move(1, 0, 1),
+                new Move(3, 3, 0)
+        ));
+    }
+
+    @Test
+    public void rearrangeGreedyTestMoveEmpty() {
+        int[] given = {1, 2, 0, 3};
+        int[] desired = {0, 1, 3, 2};
+        
+        List<Move> list = rearrangeGreedy(given, desired);
+        assertEquals(list, Arrays.asList(
+                new Move(3, 3, 2),
+                new Move(2, 1, 3),
+                new Move(1, 0, 1)));
+    }
+    
+    @Test
+    public void rearrangeGreedyTestArranged() {
+        int[] given = {1, 2, 0, 3};
+        int[] desired = {1, 2, 0, 3};
+
+        List<Move> list = rearrangeGreedy(given, desired);
+        assertEquals(list, Collections.emptyList());
+    }
+
+    @Test
+    public void rearrangeGreedyTestEmpty() {
+        int[] given = {};
+        int[] desired = {};
+
+        List<Move> list = rearrangeGreedy(given, desired);
+        assertEquals(list, Collections.emptyList());
+    }
+
+    @Test
+    public void rearrangeGreedyTestShift() {
+        int[] given = {0, 1, 2, 3};
+        int[] desired = {1, 2, 3, 0};
+
+        List<Move> list = rearrangeGreedy(given, desired);
         assertEquals(list, Arrays.asList(
                 new Move(1, 1, 0),
                 new Move(2, 2, 1),
