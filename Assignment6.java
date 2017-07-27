@@ -66,8 +66,6 @@ public class Assignment6 {
         for (int car = nextCarToMove(given, desired, indexMap, misplacedCars); car > 0;
                 car = nextCarToMove(given, desired, indexMap, misplacedCars)) {
             listOfMoves.add(move(car, given, indexMap));
-            // remove car from set of misplaced cars
-            misplacedCars.remove(car);
         }
         
         return listOfMoves;
@@ -90,16 +88,17 @@ public class Assignment6 {
         
         //car belonging to the current empty slot
         if (desired[indexMap.get(0)] != 0) {
-            return desired[indexMap.get(0)];
+            // remove car from set of misplaced cars
+            int nextCarToMove = desired[indexMap.get(0)];
+            misplacedCars.remove(nextCarToMove);
+            return nextCarToMove;
 
         }
 
         //empty lot in its desired place => deblock the algorithm
         // pick a random car from set of misplaced cars
         if (misplacedCars.size() > 0) {
-            Integer nextCarToMove = misplacedCars.iterator().next();
-            misplacedCars.remove(nextCarToMove);
-            return nextCarToMove;
+            return misplacedCars.iterator().next();
         }
 
         //given array is rearranged
@@ -146,7 +145,7 @@ public class Assignment6 {
      * @return the set of cars that are misplaced in the input array compared to the desired output.
      */
     private static HashSet<Integer> populateMisplacedCars(int[] given, int[] desired) {
-        HashSet<Integer> misplacedCars = new HashSet<Integer>();
+        HashSet<Integer> misplacedCars = new HashSet<>();
         for (int i = 0; i < given.length; i++) {
             if (given[i] != desired[i] && given[i] != 0) {
                 misplacedCars.add(given[i]);
