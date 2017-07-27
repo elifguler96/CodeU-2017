@@ -97,7 +97,7 @@ public class Assignment6 {
         //empty lot in its desired place => deblock the algorithm
         // pick a random car from set of misplaced cars
         if (misplacedCars.size() > 0) {
-            Integer nextCarToMove = (Integer)misplacedCars.toArray()[0];
+            Integer nextCarToMove = misplacedCars.iterator().next();
             misplacedCars.remove(nextCarToMove);
             return nextCarToMove;
         }
