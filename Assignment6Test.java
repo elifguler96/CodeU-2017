@@ -5,52 +5,69 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.elifguler.Assignment6.rearrange;
+import static com.elifguler.Assignment6.Move;
 import static org.junit.jupiter.api.Assertions.*;
 
-class Assignment6Test {
+public class Assignment6Test {
+    
     @Test
-    void rearrangeTestNormal() {
-        int[] given = {1,2,0,3};
-        int[] desired = {3,1,2,0};
+    public void rearrangeTestNormal() {
+        int[] given = {1, 2, 0, 3};
+        int[] desired = {3, 1, 2, 0};
 
-        List<List<Integer>> list = rearrange(given, desired);
+        List<Move> list = rearrange(given, desired);
         assertEquals(list, Arrays.asList(
-                Arrays.asList(0,2),
-                Arrays.asList(3,0),
-                Arrays.asList(1,3),
-                Arrays.asList(2,1),
-                Arrays.asList(3,2)
+                new Move(1, 0, 2),
+                new Move(3, 3, 0),
+                new Move(2, 1, 3),
+                new Move(1, 2, 1),
+                new Move(2, 3, 2)
         ));
     }
 
     @Test
-    void rearrangeTestArranged() {
-        int[] given = {1,2,0,3};
-        int[] desired = {1,2,0,3};
+    public void rearrangeTestMoveEMpty() {
+        int[] given = {1, 2, 0, 3};
+        int[] desired = {0, 1, 3, 2};
+        
+        List<Move> list = rearrange(given, desired);
+        assertEquals(list, Arrays.asList(
+                new Move(2, 1, 2),
+                new Move(1, 0, 1),
+                new Move(2, 2, 0),
+                new Move(3, 3, 2),
+                new Move(2, 0, 3)));
+    }
+    
+    @Test
+    public void rearrangeTestArranged() {
+        int[] given = {1, 2, 0, 3};
+        int[] desired = {1, 2, 0, 3};
 
-        List<List<Integer>> list = rearrange(given, desired);
+        List<Move> list = rearrange(given, desired);
         assertEquals(list, Collections.emptyList());
     }
 
     @Test
-    void rearrangeTestEmpty() {
+    public void rearrangeTestEmpty() {
         int[] given = {};
         int[] desired = {};
 
-        List<List<Integer>> list = rearrange(given, desired);
+        List<Move> list = rearrange(given, desired);
         assertEquals(list, Collections.emptyList());
     }
 
     @Test
-    void rearrangeTestShift() {
-        int[] given = {0,1,2,3};
-        int[] desired = {1,2,3,0};
+    public void rearrangeTestShift() {
+        int[] given = {0, 1, 2, 3};
+        int[] desired = {1, 2, 3, 0};
 
-        List<List<Integer>> list = rearrange(given, desired);
+        List<Move> list = rearrange(given, desired);
         assertEquals(list, Arrays.asList(
-                Arrays.asList(1,0),
-                Arrays.asList(2,1),
-                Arrays.asList(3,2)
+                new Move(1, 1, 0),
+                new Move(2, 2, 1),
+                new Move(3, 3, 2)
         ));
     }
+    
 }
