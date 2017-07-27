@@ -1,16 +1,18 @@
 package assignment6;
 
+import org.junit.jupiter.api.Test;
+
 import static assignment6.Assignment6.printListOfMoves;
 import static assignment6.Assignment6.rearrange;
 import static assignment6.Assignment6.rearrangeGreedy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class Assignment6Test {
-    
+
     @Test
     public void rearrangeTestNormal() {
         int[] given = {1, 2, 0, 3};
@@ -77,6 +79,9 @@ public class Assignment6Test {
         int[] desired = {3, 1, 2, 0};
 
         List<Move> list = rearrangeGreedy(given, desired);
+
+        printListOfMoves(list);
+
         assertEquals(list, Arrays.asList(
                 new Move(2, 1, 2),
                 new Move(1, 0, 1),
@@ -125,6 +130,16 @@ public class Assignment6Test {
                 new Move(2, 2, 1),
                 new Move(3, 3, 2)
         ));
+    }
+
+    @Test
+    public void rearrangeGreedyLongArray() {
+        int[] given = {1, 2, 3, 4, 5, 6, 0};
+        int[] desired = {3, 1, 6, 2, 4, 5, 0};
+
+        List<Move> list = rearrangeGreedy(given, desired);
+        // check we perform 7 moves
+        assertEquals(list.size(), 7);
     }
     
 }
