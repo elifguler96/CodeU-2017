@@ -1,6 +1,10 @@
 package assignment6;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.HashSet;
 
 public class Assignment6 {
     /**
@@ -61,8 +65,9 @@ public class Assignment6 {
 
         for (int car = nextCarToMove(given, desired, indexMap, misplacedCars); car > 0;
                 car = nextCarToMove(given, desired, indexMap, misplacedCars)) {
-            
             listOfMoves.add(move(car, given, indexMap));
+            // remove car from set of misplaced cars
+            misplacedCars.remove(car);
         }
         
         return listOfMoves;
@@ -85,8 +90,6 @@ public class Assignment6 {
         
         //car belonging to the current empty slot
         if (desired[indexMap.get(0)] != 0) {
-            // car will be moved in place next, remove it from set of misplaced cars
-            misplacedCars.remove(desired[indexMap.get(0)]);
             return desired[indexMap.get(0)];
 
         }
