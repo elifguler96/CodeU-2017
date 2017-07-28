@@ -1,18 +1,30 @@
 package assignment6;
 
-import org.junit.jupiter.api.Test;
-
-import static assignment6.Assignment6.printListOfMoves;
 import static assignment6.Assignment6.rearrange;
 import static assignment6.Assignment6.rearrangeGreedy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.ArrayList;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class Assignment6Test {
 
+    /**
+     * Executes a plan (list of movements) on an arrangements of cars.
+     *
+     * @param given current map of the parking lot
+     * @param plan list of movements to be executed on the parking lot
+     */
+    public static void executeMoves(int[] given, List<Move> plan) {
+        plan.forEach((m) -> {
+            given[m.getTo()] = m.getCar();
+            given[m.getFrom()] = 0;
+        });
+    }
+    
     @Test
     public void rearrangeTestNormal() {
         int[] given = {1, 2, 0, 3};
@@ -79,9 +91,6 @@ public class Assignment6Test {
         int[] desired = {3, 1, 2, 0};
 
         List<Move> list = rearrangeGreedy(given, desired);
-
-        printListOfMoves(list);
-
         assertEquals(list, Arrays.asList(
                 new Move(2, 1, 2),
                 new Move(1, 0, 1),
@@ -142,4 +151,61 @@ public class Assignment6Test {
         assertEquals(list.size(), 7);
     }
     
+    @Test
+    public void testRearrangeRandom() {
+        ArrayList<Integer> givenList = new ArrayList<>();
+        ArrayList<Integer> desiredList = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            givenList.add(i);
+            desiredList.add(i);
+        }
+        java.util.Collections.shuffle(givenList);
+        java.util.Collections.shuffle(desiredList);
+        int[] given = givenList.stream().mapToInt(i->i).toArray();
+        int[] givenEx = given.clone();
+        int[] desired = desiredList.stream().mapToInt(i->i).toArray();
+        List<Move> list = rearrange(given, desired);
+        executeMoves(givenEx, list);
+        
+        assertArrayEquals(given, desired);
+    }
+    
+    
+    @Test
+    public void testRearrangeGreedyRandom() {
+        ArrayList<Integer> givenList = new ArrayList<>();
+        ArrayList<Integer> desiredList = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            givenList.add(i);
+            desiredList.add(i);
+        }
+        java.util.Collections.shuffle(givenList);
+        java.util.Collections.shuffle(desiredList);
+        int[] given = givenList.stream().mapToInt(i->i).toArray();
+        int[] givenEx = given.clone();
+        int[] desired = desiredList.stream().mapToInt(i->i).toArray();
+        List<Move> list = rearrangeGreedy(given, desired);
+        executeMoves(givenEx, list);
+        
+        assertArrayEquals(givenEx, desired);
+    }
+
+    @Test
+    public void testCompareNoOfMoves() {
+        ArrayList<Integer> givenList = new ArrayList<>();
+        ArrayList<Integer> desiredList = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            givenList.add(i);
+            desiredList.add(i);
+        }
+        java.util.Collections.shuffle(givenList);
+        java.util.Collections.shuffle(desiredList);
+        int[] given = givenList.stream().mapToInt(i -> i).toArray();
+        int[] givenGreedy = given.clone();
+        int[] desired = desiredList.stream().mapToInt(i -> i).toArray();
+        List<Move> list = rearrange(given, desired);
+        List<Move> listGreedy = rearrangeGreedy(givenGreedy, desired);
+
+        assert(list.size() >= listGreedy.size());
+    }
 }
