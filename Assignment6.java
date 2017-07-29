@@ -52,9 +52,10 @@ public class Assignment6 {
      *
      * @param given   initial version of the array of numbers.
      * @param desired final version of the array of numbers.
+     * @param alg algorithm used in the unblock case
      * @return list of moves made during arrangement.
      */
-    public static List<Move> rearrangeGreedy(int[] given, int[] desired) {
+    public static List<Move> rearrangeGreedy(int[] given, int[] desired, GREEDY_ALG_TYPE alg) {
         List<Move> listOfMoves = new LinkedList<>();
         
         // Keys are values in given, values are their indexes in given.
@@ -63,8 +64,8 @@ public class Assignment6 {
         // All cars are initially candidates
         HashSet<Integer> misplacedCars = populateMisplacedCars(given, desired);
 
-        for (int car = nextCarToMove(given, desired, indexMap, misplacedCars); car > 0;
-                car = nextCarToMove(given, desired, indexMap, misplacedCars)) {
+        for (int car = nextCarToMove(given, desired, indexMap, misplacedCars, alg); car > 0;
+                car = nextCarToMove(given, desired, indexMap, misplacedCars, alg)) {
             listOfMoves.add(move(car, given, indexMap));
         }
         
@@ -80,7 +81,7 @@ public class Assignment6 {
      * @param indexMap the map from cars to slots
      * @return next car to be moved (0 in case of rearranged array)
      */
-    private static int nextCarToMove(int[] given, int[] desired, Map<Integer, Integer> indexMap, HashSet<Integer> misplacedCars) {
+    private static int nextCarToMove(int[] given, int[] desired, Map<Integer, Integer> indexMap, HashSet<Integer> misplacedCars, GREEDY_ALG_TYPE alg) {
         //arrays of length 0
         if (given.length == 0) {
             return 0;
@@ -95,13 +96,33 @@ public class Assignment6 {
 
         }
 
-        //empty lot in its desired place => deblock the algorithm
+        //empty lot in its desired place => unblock the algorithm
+        switch (alg) {
+            case UNBLOCK_USING_SET:
+                return unblockUsingMisplacedCar(misplacedCars);
+            case UNBLOCK_USING_TRAVERSAL:
+                return unblockUsingTraversal(given, desired);
+        }
+
+        //given array is rearranged
+        return 0;
+    }
+
+    private static int unblockUsingTraversal(int[] given, int[] desired) {
+        //find the first car that isn't in its right place
+        for (int i = 0; i < given.length; i++) {
+            if (given[i] != 0 && given[i] != desired[i]) {
+                return given[i];
+            }
+        }
+        return 0;
+    }
+
+    private static int unblockUsingMisplacedCar(HashSet<Integer> misplacedCars) {
         // pick a random car from set of misplaced cars
         if (misplacedCars.size() > 0) {
             return misplacedCars.iterator().next();
         }
-
-        //given array is rearranged
         return 0;
     }
 
@@ -172,6 +193,11 @@ public class Assignment6 {
      */
     private static void printMove(Move m) {
         System.out.println(m.toString());
+    }
+
+    public enum GREEDY_ALG_TYPE {
+        UNBLOCK_USING_TRAVERSAL,
+        UNBLOCK_USING_SET
     }
     
 }
