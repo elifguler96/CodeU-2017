@@ -214,33 +214,36 @@ public class Assignment6Test {
 
     @Test
     public void testStressCompareTimeAlmostInPlace() {
-        int[] given = new int[100000];
-        int[] desired = new int[100000];
+        int[] givenSet = new int[100000];
+        int[] desiredSet = new int[100000];
         for (int i = 0; i < 100000; i++) {
-            given[i] = i;
-            desired[i] = i;
+            givenSet[i] = i;
+            desiredSet[i] = i;
         }
-        desired[90000] = 90003;
-        desired[90001] = 90000;
-        desired[90002] = 90001;
-        desired[90003] = 90002;
+        desiredSet[90000] = 90003;
+        desiredSet[90001] = 90000;
+        desiredSet[90002] = 90001;
+        desiredSet[90003] = 90002;
 
-        // warm up cache to avoid one alg being handicapped by cache misses
-        rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_TRAVERSAL);
+        int[] givenTraversal = givenSet.clone();
+        int[] desiredTraversal = desiredSet.clone();
 
         //measure
         long start = System.nanoTime();
-        List<Move> movesCaseTraversal = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_TRAVERSAL);
+        List<Move> movesCaseTraversal = rearrangeGreedy(givenTraversal, desiredTraversal, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_TRAVERSAL);
         long end = System.nanoTime();
         long timeTraversalNano = end - start;
 
         start = System.nanoTime();
-        List<Move> movesCaseSet = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
+        List<Move> movesCaseSet = rearrangeGreedy(givenSet, desiredSet, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
         end = System.nanoTime();
         long timeSetNano = end - start;
 
         System.out.println(timeSetNano);
         System.out.println(timeTraversalNano);
+
+        System.out.println(movesCaseSet.size());
+        System.out.println(movesCaseTraversal.size());
 
         assert(movesCaseSet.size() <= movesCaseTraversal.size());
         assert(timeSetNano <= timeTraversalNano);
