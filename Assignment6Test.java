@@ -1,20 +1,21 @@
 package assignment6;
 
-import static assignment6.Assignment6.rearrange;
-import static assignment6.Assignment6.rearrangeGreedy;
-import java.util.ArrayList;
+import org.junit.Before;
+import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static assignment6.Assignment6.rearrange;
+import static assignment6.Assignment6.rearrangeGreedy;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class Assignment6Test {
-
+    private int[] given;
+    private int[] desired;
     /**
      * Executes a plan (list of movements) on an arrangements of cars.
      *
@@ -27,10 +28,14 @@ public class Assignment6Test {
             given[m.getFrom()] = 0;
         });
     }
-    
+
+    @Before
+    public void setUp() {
+        given = new int[]{1, 2, 0, 3};
+        desired = new int[]{0, 1, 3, 2};
+    }
     @Test
     public void rearrangeTestNormal() {
-        int[] given = {1, 2, 0, 3};
         int[] desired = {3, 1, 2, 0};
 
         List<Move> list = rearrange(given, desired);
@@ -45,9 +50,6 @@ public class Assignment6Test {
 
     @Test
     public void rearrangeTestMoveEmpty() {
-        int[] given = {1, 2, 0, 3};
-        int[] desired = {0, 1, 3, 2};
-        
         List<Move> list = rearrange(given, desired);
         assertEquals(list, Arrays.asList(
                 new Move(2, 1, 2),
@@ -59,7 +61,6 @@ public class Assignment6Test {
     
     @Test
     public void rearrangeTestArranged() {
-        int[] given = {1, 2, 0, 3};
         int[] desired = {1, 2, 0, 3};
 
         List<Move> list = rearrange(given, desired);
@@ -90,10 +91,9 @@ public class Assignment6Test {
     
     @Test
     public void rearrangeGreedyTestNormal() {
-        int[] given = {1, 2, 0, 3};
         int[] desired = {3, 1, 2, 0};
 
-        List<Move> list = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
+        List<Move> list = rearrangeGreedy(given, desired);
         assertEquals(list, Arrays.asList(
                 new Move(2, 1, 2),
                 new Move(1, 0, 1),
@@ -103,10 +103,7 @@ public class Assignment6Test {
 
     @Test
     public void rearrangeGreedyTestMoveEmpty() {
-        int[] given = {1, 2, 0, 3};
-        int[] desired = {0, 1, 3, 2};
-        
-        List<Move> list = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
+        List<Move> list = rearrangeGreedy(given, desired);
         assertEquals(list, Arrays.asList(
                 new Move(3, 3, 2),
                 new Move(2, 1, 3),
@@ -115,10 +112,9 @@ public class Assignment6Test {
     
     @Test
     public void rearrangeGreedyTestArranged() {
-        int[] given = {1, 2, 0, 3};
         int[] desired = {1, 2, 0, 3};
 
-        List<Move> list = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
+        List<Move> list = rearrangeGreedy(given, desired);
         assertEquals(list, Collections.emptyList());
     }
 
@@ -127,7 +123,7 @@ public class Assignment6Test {
         int[] given = {};
         int[] desired = {};
 
-        List<Move> list = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
+        List<Move> list = rearrangeGreedy(given, desired);
         assertEquals(list, Collections.emptyList());
     }
 
@@ -136,7 +132,7 @@ public class Assignment6Test {
         int[] given = {0, 1, 2, 3};
         int[] desired = {1, 2, 3, 0};
 
-        List<Move> list = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
+        List<Move> list = rearrangeGreedy(given, desired);
         assertEquals(list, Arrays.asList(
                 new Move(1, 1, 0),
                 new Move(2, 2, 1),
@@ -149,7 +145,7 @@ public class Assignment6Test {
         int[] given = {1, 2, 3, 4, 5, 6, 0};
         int[] desired = {3, 1, 6, 2, 4, 5, 0};
 
-        List<Move> list = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
+        List<Move> list = rearrangeGreedy(given, desired);
         // check we perform 7 moves
         assertEquals(list.size(), 7);
     }
@@ -187,7 +183,7 @@ public class Assignment6Test {
         int[] given = givenList.stream().mapToInt(i->i).toArray();
         int[] givenEx = given.clone();
         int[] desired = desiredList.stream().mapToInt(i->i).toArray();
-        List<Move> list = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
+        List<Move> list = rearrangeGreedy(given, desired);
         executeMoves(givenEx, list);
         
         assertArrayEquals(givenEx, desired);
@@ -207,43 +203,8 @@ public class Assignment6Test {
         int[] givenGreedy = given.clone();
         int[] desired = desiredList.stream().mapToInt(i -> i).toArray();
         List<Move> list = rearrange(given, desired);
-        List<Move> listGreedy = rearrangeGreedy(givenGreedy, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
+        List<Move> listGreedy = rearrangeGreedy(givenGreedy, desired);
 
         assert(list.size() >= listGreedy.size());
-    }
-
-    @Test
-    public void testStressCompareTimeAlmostInPlace() {
-        int[] given = new int[100000];
-        int[] desired = new int[100000];
-        for (int i = 0; i < 100000; i++) {
-            given[i] = i;
-            desired[i] = i;
-        }
-        desired[90000] = 90003;
-        desired[90001] = 90000;
-        desired[90002] = 90001;
-        desired[90003] = 90002;
-
-        // warm up cache to avoid one alg being handicapped by cache misses
-        rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_TRAVERSAL);
-
-        //measure
-        long start = System.nanoTime();
-        List<Move> movesCaseTraversal = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_TRAVERSAL);
-        long end = System.nanoTime();
-        long timeTraversalNano = end - start;
-
-        start = System.nanoTime();
-        List<Move> movesCaseSet = rearrangeGreedy(given, desired, Assignment6.GREEDY_ALG_TYPE.UNBLOCK_USING_SET);
-        end = System.nanoTime();
-        long timeSetNano = end - start;
-
-        System.out.println(timeSetNano);
-        System.out.println(timeTraversalNano);
-
-        assert(movesCaseSet.size() <= movesCaseTraversal.size());
-        assert(timeSetNano <= timeTraversalNano);
-
     }
 }
