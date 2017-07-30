@@ -7,6 +7,15 @@ import java.util.Map;
 import java.util.HashSet;
 
 public class Assignment6 {
+    
+    public enum GREEDY_ALG_TYPE {
+        UNBLOCK_USING_TRAVERSAL,
+        UNBLOCK_USING_SET
+    }
+    
+    //algorithm used in the unblock case
+    static public GREEDY_ALG_TYPE alg = GREEDY_ALG_TYPE.UNBLOCK_USING_SET;
+    
     /**
      * Rearranges given to make it the same as desired.
      * O(n) time complexity, O(n) space complexity.
@@ -52,20 +61,20 @@ public class Assignment6 {
      *
      * @param given   initial version of the array of numbers.
      * @param desired final version of the array of numbers.
-     * @param alg algorithm used in the unblock case
      * @return list of moves made during arrangement.
      */
-    public static List<Move> rearrangeGreedy(int[] given, int[] desired, GREEDY_ALG_TYPE alg) {
+    public static List<Move> rearrangeGreedy(int[] given, int[] desired) {
         List<Move> listOfMoves = new LinkedList<>();
         
         // Keys are values in given, values are their indexes in given.
         Map<Integer, Integer> indexMap = populateIndexMap(given);
 
+        
         // All cars are initially candidates
         HashSet<Integer> misplacedCars = populateMisplacedCars(given, desired);
 
-        for (int car = nextCarToMove(given, desired, indexMap, misplacedCars, alg); car > 0;
-                car = nextCarToMove(given, desired, indexMap, misplacedCars, alg)) {
+        for (int car = nextCarToMove(given, desired, indexMap, misplacedCars); car > 0;
+                car = nextCarToMove(given, desired, indexMap, misplacedCars)) {
             listOfMoves.add(move(car, given, indexMap));
         }
         
@@ -81,7 +90,9 @@ public class Assignment6 {
      * @param indexMap the map from cars to slots
      * @return next car to be moved (0 in case of rearranged array)
      */
-    private static int nextCarToMove(int[] given, int[] desired, Map<Integer, Integer> indexMap, HashSet<Integer> misplacedCars, GREEDY_ALG_TYPE alg) {
+    private static int nextCarToMove(int[] given, int[] desired, Map<Integer, Integer> indexMap,
+            HashSet<Integer> misplacedCars) {
+        
         //arrays of length 0
         if (given.length == 0) {
             return 0;
@@ -193,11 +204,6 @@ public class Assignment6 {
      */
     private static void printMove(Move m) {
         System.out.println(m.toString());
-    }
-
-    public enum GREEDY_ALG_TYPE {
-        UNBLOCK_USING_TRAVERSAL,
-        UNBLOCK_USING_SET
     }
     
 }
